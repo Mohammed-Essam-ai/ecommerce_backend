@@ -102,3 +102,6 @@ Endpoints
 | POST   | `/creteorder/` | Create a new order |
 | GET    | `/orders/`     | List user orders   |
 
+---------------------------------------------------------------------------------------------------------------------------------------
+## ERD Diagram
+![ERD](docs/erd.png)
