@@ -1,18 +1,32 @@
 from django.urls import path
-from . import views
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from .views import RegiseterView, LogoutView
-from rest_framework.authtoken.views import obtain_auth_token
+from .views import *
+# from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 app_name = 'accounts'
 
 urlpatterns=[
-    path('register/',RegiseterView.as_view(),name='register'),
-    path('login/',obtain_auth_token,name='login'),
-    path('logout/',LogoutView.as_view(),name='logout'),
-    path('changepassword/',auth_views.PasswordChangeView.as_view(template_name='acounts/changepassword.html',success_url='changepassworddone'),name='changepassword'),
-    path('changepassworddone/',auth_views.PasswordChangeDoneView.as_view(template_name='acounts/changepassworddone.html'),name='changepassworddone'),
-    path('editprofile/',views.EditProfileView.as_view(),name='editprofile')
+    path('token/', TokenObtainPairView.as_view()),
+    path('token/refresh/', TokenRefreshView.as_view()),
+    # ---------------------------------
+    path('register/', RegiseterView.as_view()),
+    path('user/update/', UpdateUserrView.as_view()),
+    path('profile/', ProfileView.as_view()),
 ]
 
+'''
+{
+    "user": {
+        "username": "mahmoud",
+        "email": "mahmoudd@gmail.com"
+    },
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4ODAxMjgzOSwiaWF0IjoxNzg3OTI2NDM5LCJqdGkiOiJiNjNhMWZmMGJmMjQ0ZjhkOTc0ZTBhOGE4MjU3YTY0NCIsInVzZXJfaWQiOiIzIn0.oV4z02tc6kki54hKYGnS7WnmjnIxDJF4Sys-Ds8MdeQ",
+    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg3OTI2NzM5LCJpYXQiOjE3ODc5MjY0MzksImp0aSI6IjlmOTA1ZGE2MTY0OTQ3ZTY5ZWE4ODI0NjNlMGRhNGRjIiwidXNlcl9pZCI6IjMifQ.l-7N9TPltK8jrlWtKaI4RROpIZ_UVN2begMNG8Ua0xM"
+}
+
+'''

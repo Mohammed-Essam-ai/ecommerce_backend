@@ -15,15 +15,23 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated',
-    ],
-}
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
 
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
 # Application definition
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
+
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,13 +45,16 @@ INSTALLED_APPS = [
     'products',
     'rest_framework',
     'rest_framework.authtoken',
+    'cart',
+    'orders',
+    "django_filters",
+    "corsheaders",
 ]
 
 
 
 MIDDLEWARE = [
-
-    
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,7 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -70,7 +81,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
@@ -128,7 +139,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
+
 LOGOUT_REDIRECT_URL='home' 
 LOGIN_REDIRECT_URL='home' 
-LOGIN_URL='aconuts/login'
+# LOGIN_URL='aconuts/login'
  

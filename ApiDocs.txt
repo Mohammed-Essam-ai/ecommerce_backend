@@ -1,0 +1,309 @@
+VIEW => class ProductView(APIView):
+API => GET => /api/products/<product_id>/
+
+        Response
+           ↓    
+
+           {
+    "id": 5,
+    "product_name": "iPhone 15",
+    "content": "Apple smartphone",
+    "price": "35000.000",
+    "image": "/media/photos/26/08/22/iphone.jpg",
+    "active": true,
+    "category": 2,
+    "url": "https://example.com"
+        }
+
+--------------------------------
+VIEW => class ProductListView(APIView):
+API => GET => /api/categories/<category_id>/products/
+        Response
+            ↓ 
+            [
+    {
+        "id": 1,
+        "product_name": "Mouse",
+        "content": "Gaming Mouse",
+        "price": "500.000",
+        "image": "/media/...",
+        "active": true,
+        "category": 2,
+        "url": "..."
+    },
+    {
+        "id": 2,
+        "product_name": "Keyboard",
+        "content": "Mechanical Keyboard",
+        "price": "1500.000",
+        "image": "/media/...",
+        "active": true,
+        "category": 2,
+        "url": "..."
+    }
+            ]
+--------------------------------
+VIEW => class CategoryListView(APIView):
+API => GET => /api/categories/
+        Response
+            ↓ 
+            {
+    "categories": [
+        {
+            "id": 1,
+            "category_name": "Gaming",
+            "photo": "/media/photos/..."
+        },
+        {
+            "id": 2,
+            "category_name": "Shoes",
+            "photo": "/media/photos/..."
+        }
+    ]
+           }
+--------------------------------
+VIEW => class OrderView(APIView):
+API => GET => /api/orders/
+        Response
+            ↓
+            [
+    {
+        "id": 10,
+        "user": 5,
+        "total_price": "4500.00",
+        "status": "pending",
+        "created_at": "2026-08-22T12:30:00Z",
+        "items": [
+            {
+                "id": 20,
+                "product": 3,
+                "quantity": 2,
+                "price": "3000.00"
+            },
+            {
+                "id": 21,
+                "product": 7,
+                "quantity": 1,
+                "price": "1500.00"
+            }
+        ]
+    }
+                 ]
+--------------------------------
+VIEW => class OrderView(APIView):
+API => POST => /api/orders/
+        Request
+            ↓ 
+            {
+    "items": [
+        {
+            "product": 3,
+            "quantity": 2
+        },
+        {
+            "product": 7,
+            "quantity": 1
+        }
+    ]
+           }
+                Response
+                    ↓     
+                {
+    "id": 10,
+    "user": 5,
+    "total_price": "4500.00",
+    "status": "pending",
+    "created_at": "2026-08-22T12:30:00Z",
+    "items": [
+        {
+            "id": 20,
+            "product": 3,
+            "quantity": 2,
+            "price": "3000.00"
+        },
+        {
+            "id": 21,
+            "product": 7,
+            "quantity": 1,
+            "price": "1500.00"
+        }
+    ]
+                }
+
+--------------------------------
+VIEW => class ReviewView(APIView):
+API => GET =>  /api/products/5/reviews/
+        Response
+            ↓
+            [
+    {
+        "id": 1,
+        "user": 3,
+        "product": 5,
+        "comment": "ممتاز",
+        "rating": "4.5",
+        "created_at": "2026-08-22T15:00:00Z"
+    }
+           ]
+
+--------------------------------
+VIEW => class ReviewView(APIView):
+API => POST =>  /api/products/5/reviews/
+             Request   
+                ↓
+                {
+    "comment": "المنتج ممتاز جدًا",
+    "rating": 4.5
+                }
+--------------------------------
+VIEW => class CartItem(APIView):
+API =>  GET => /api/cart/items/
+        Response
+            ↓
+            [
+    {
+        "id": 1,
+        "product": {
+            "id": 5,
+            "product_name": "iPhone",
+            "content": "Apple Phone",
+            "price": "35000.000",
+            "image": "/media/...",
+            "active": true,
+            "category": 2,
+            "url": "..."
+        },
+        "cart": 3,
+        "quantity": 2
+    }
+]              
+--------------------------------
+VIEW => class CartItem(APIView):
+API => POST=> /api/cart/items/
+        Request
+            ↓
+            {
+    "product": 5,
+    "quantity": 2
+}              
+--------------------------------
+VIEW => CheckoutView
+API => POST=> checkout/
+        Response
+           ↓
+           {
+    "message": "Order created successfully",
+    "order_id": 15,
+    "total_price": "750.00",
+    "status": "pending"
+           }            
+--------------------------------
+VIEW => ConfirmOrderView
+API => POST=> orders/<int:order_id>/confirm/
+        Response
+           ↓
+           {
+    "message": "Order confirmed successfully",
+    "order_id": 15,
+    "total_price": "750.00",
+    "status": "paid"
+        }            
+--------------------------------
+VIEW => CancelOrderView
+API => POST=> orders/<int:order_id>/cancel/
+        Response
+           ↓
+           {
+    "message": "Order cancelled successfully"
+           }              
+--------------------------------
+        Register
+VIEW => RegisterView
+API => POST => /api/register/
+        
+        Request
+            ↓
+                {
+    "username": "ahmed",
+    "email": "ahmed@gmail.com",
+    "password": "12345678"
+                }
+                
+        Response
+           ↓
+        {
+    "message": "User registered successfully"
+        }
+--------------------------------
+            Update User
+
+VIEW => UpdateUserView
+API => PUT => /api/user/update/
+
+        Headers : { Authorization: Token <your_token>} 
+
+        Request
+            ↓
+            {
+    "username": "ahmed_new",
+    "email": "newemail@gmail.com"
+                }
+
+        Response
+            ↓
+        {
+    "username": "ahmed_new",
+    "email": "newemail@gmail.com"
+        }
+
+--------------------------------
+            Logout
+
+VIEW =>  class LogoutView(APIView):
+API => DELETE => DELETE /api/logout/
+        Headers:{Authorization: Token <your_token>}
+        Respose
+           ↓
+           {
+    "message": "you have logged out"
+           }
+
+--------------------------------
+        Profile — Get   
+
+VIEW => ProfileView
+API => GET => /api/profile/
+        Headers:{Authorization: Token <your_token>}
+        Respose
+           ↓
+           {
+    "id": 1,
+    "user": 1,
+    "bio": "Backend Developer",
+    "phone": "01000000000",
+    "image": "..."
+            }
+--------------------------------
+       Profile — Update     
+
+VIEW => ProfileView
+API => PUT => /api/profile/
+        Headers:{Authorization: Token <your_token>}
+        Request
+           ↓
+           {
+    "bio": "Django Backend Developer",
+    "phone": "01000000000"
+                }
+        Respose
+           ↓
+           {
+    "id": 1,
+    "user": 1,
+    "bio": "Django Backend Developer",
+    "phone": "01000000000",
+    "image": "..."
+          }
+--------------------------------            
+VIEW =>
+API => PUT => 

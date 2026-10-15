@@ -6,41 +6,55 @@ class CategorySerializer(serializers.ModelSerializer):
         model=Category
         fields='__all__'
 
+class SizeImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=ProductImage
+        fields="__all__"
+
+class ProductColorSerializer(serializers.ModelSerializer):
+    images = SizeImageSerializer(many=True, read_only=True)
+    class Meta:
+        model=ProductColor
+        fields='__all__' 
+
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=ProductImage
+        fields='__all__' 
+
+
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Brand
+        fields='__all__'    
+
+
+class DressStyleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=DressStyle
+        fields='__all__'
+
+class SizeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Size
+        fields='__all__'
+
 class ProductSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+    brand = BrandSerializer()
+    style = DressStyleSerializer()
+    sizes = SizeSerializer(many=True)
+    colors=ProductColorSerializer(many=True)
     class Meta:
         model=Product
-        fields='__all__'        
+        fields='__all__' 
 
-class OrderItemSerializer(serializers.ModelSerializer):
-    product_name=serializers.CharField(source='product.product_name',read_only=True)
+class ReviewSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source="user.username", read_only=True)
     class Meta:
-        model=OrderItem
-        fields = ['id', 'product', 'product_name', 'quantity', 'price']
+        model=Review
+        fields='__all__'
+        read_only_fields=['user','created_at',"user_name"]
 
-class OrderSerializer(serializers.ModelSerializer):
-    items=OrderItemSerializer(many=True,read_only=True)
-    class Meta:
-        model = Order
-        fields = ['id', 'user', 'total_price', 'status', 'created_at', 'items']
-        read_only_fields = ['user', 'status', 'created_at']
-
-class CreateOrderItemSerializer(serializers.Serializer):
-    product = serializers.IntegerField()
-    quantity = serializers.IntegerField(min_value=1)
-
-class CreateOrderSerializer(serializers.Serializer):
-    items = CreateOrderItemSerializer(many=True)
-    def create(self,validated_data):
-        user=self.context['request'].user
-        items=validated_data['items']
-        order=Order.objects.create(user=user,total_price=0)
-        total=0
-        for item in items:
-            product=Product.objects.get(id=item['product'])
-            quantity=item['quantity']
-            price=product.price*quantity
-            orderitem=OrderItem.objects.create(order=order,product=product,quantity=quantity,price=price)
-            total+=price            
-        order.total_price=total
-        order.save()
-        return order    
+ 
