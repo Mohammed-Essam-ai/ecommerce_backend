@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: .
+    container_name: django-backend-container
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+
+  frontend:
+    build: ../../ecommerce_frontend/my-react-app
+    container_name: ecommerce-frontend-container
+    ports:
+      - "5173:5173"
+    command: npm run dev -- --host 0.0.0.0
+    volumes:
+      - ../../ecommerce_frontend/my-react-app:/app
+      - /app/node_modules
+    depends_on:
+      - backend
