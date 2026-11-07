@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 from django.core.paginator import Paginator
 from rest_framework.views import APIView
@@ -94,7 +94,7 @@ class ConfirmOrderView(APIView):
             user=request.user
         )
 
-        items=cart.items.all()
+        items=cart.cartitems.all()
         
         for item in items:
             product=item.product
@@ -133,4 +133,3 @@ class CancelOrderView(APIView):
             },
             status=status.HTTP_200_OK
         )
-        

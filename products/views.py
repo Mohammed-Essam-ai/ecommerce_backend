@@ -35,7 +35,7 @@ class ProductListView(ListAPIView):
 
     filterset_class = ProductFilter
 
-    search_fields = ['name', 'description']
+    search_fields = ['product_name', 'content']
 
     ordering_fields = ['price', 'created_at', 'rating']
 

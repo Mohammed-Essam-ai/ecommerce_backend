@@ -17,7 +17,6 @@ class CartItemView(APIView):
         return Response(serializer.data)
 
     def post(self,request):
-        print(request.data)
         serializer=CartItemSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(cart=request.user.cart)
@@ -77,7 +76,6 @@ def DecreaseOne(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_cart_item_quantity(request):
-    print(request.data)
     cartitem_id=request.GET.get("cartitem_id")
     item = get_object_or_404(
         CartItem,
